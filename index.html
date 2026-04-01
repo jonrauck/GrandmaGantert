@@ -229,37 +229,65 @@
     .rail-wrap {
       position: relative;
       margin: 0.9rem auto 0;
-      width: min(100%, 560px);
+      width: min(100%, 860px);
     }
     .scroller-hint {
-      font-size: 0.9rem;
+      font-size: 0.88rem;
       color: var(--text-soft);
-      margin-top: 0.55rem;
+      margin-top: 0.6rem;
       text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+    .scroller-hint .swipe-icon {
+      display: inline-block;
+      animation: swipeHint 2.2s ease-in-out 3;
+      animation-delay: 1s;
+    }
+    @keyframes swipeHint {
+      0%, 100% { transform: translateX(0); opacity: 0.7; }
+      50% { transform: translateX(-6px); opacity: 1; }
+    }
+    .carousel-counter {
+      font-size: 0.88rem;
+      color: var(--text-soft);
+      text-align: center;
+      margin-top: 0.5rem;
+      font-weight: 600;
     }
     .media-rail {
-      position: relative;
-      width: 100%;
+      display: flex;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+      gap: 0;
+      padding: 0.2rem 0 0.3rem;
     }
+    .media-rail::-webkit-scrollbar { display: none; }
     .media-card {
-      display: none;
+      flex: 0 0 100%;
       width: 100%;
+      min-width: 100%;
+      scroll-snap-align: start;
+      scroll-snap-stop: always;
       border-radius: 18px;
       overflow: hidden;
       background: #fff;
       box-shadow: 0 4px 16px rgba(74, 64, 53, 0.08);
       border: 1px solid rgba(116, 139, 131, 0.08);
+      display: flex;
       flex-direction: column;
       align-items: stretch;
-    }
-    .media-card.is-active {
-      display: flex;
     }
     .media-card img {
       display: block;
       width: 100%;
       height: auto;
-      max-height: min(62vh, 520px);
+      max-height: min(78vh, 780px);
       object-fit: contain;
       background: #efe7df;
     }
@@ -269,45 +297,6 @@
       color: var(--text-soft);
       line-height: 1.45;
       background: linear-gradient(to bottom, rgba(255,255,255,0.94), #fff);
-    }
-    .carousel-controls {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.8rem;
-      margin-top: 0.85rem;
-    }
-    .carousel-btn {
-      width: 44px;
-      height: 44px;
-      border-radius: 999px;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      background: rgba(255,255,255,0.94);
-      border: 1px solid rgba(116, 139, 131, 0.18);
-      color: var(--heading);
-      box-shadow: 0 4px 12px rgba(74, 64, 53, 0.08);
-      font-size: 1.25rem;
-      line-height: 1;
-      -webkit-tap-highlight-color: transparent;
-      transition: transform 0.1s ease, box-shadow 0.1s ease;
-    }
-    .carousel-btn:active:not(:disabled) {
-      transform: scale(0.92);
-      box-shadow: 0 2px 6px rgba(74, 64, 53, 0.06);
-    }
-    .carousel-btn:disabled {
-      opacity: 0.45;
-      cursor: default;
-      box-shadow: none;
-    }
-    .carousel-status {
-      min-width: 5rem;
-      text-align: center;
-      font-size: 0.94rem;
-      color: var(--text-soft);
-      font-weight: 600;
     }
     .story-rail,
     .story-jump {
@@ -494,7 +483,7 @@
         <div class="section-head">
           <div class="eyebrow">Photos</div>
           <h2>Browse the memories one photo at a time</h2>
-          <p class="muted">Use the arrows to move left or right through each photo collection. You can also swipe on phones or tap any photo to open it larger.</p>
+          <p class="muted">Swipe left or right to browse each photo collection. Tap any photo to open it larger.</p>
         </div>
 
         <div class="photo-stack">
@@ -650,7 +639,7 @@
                   <div class="caption">Another earlier memory.</div>
                 </a>
               </div>
-              <p class="scroller-hint">Use the arrows or swipe to move one photo at a time.</p>
+              <p class="scroller-hint"><span class="swipe-icon">←</span> Swipe to browse photos <span class="swipe-icon">→</span></p>
             </div>
           </article>
 
@@ -714,7 +703,7 @@
                   <div class="caption">Restored and colorized memory.</div>
                 </a>
               </div>
-              <p class="scroller-hint">Swipe left or right to browse more restored images.</p>
+              <p class="scroller-hint"><span class="swipe-icon">←</span> Swipe to browse restored photos <span class="swipe-icon">→</span></p>
             </div>
           </article>
         </div>
@@ -843,78 +832,47 @@
         var slides = Array.from(rail.querySelectorAll('.media-card'));
         if (!slides.length) return;
 
-        var current = 0;
-        var touchStartX = 0;
-        var touchDeltaX = 0;
         var wrap = rail.parentElement;
         var hint = wrap.querySelector('.scroller-hint');
+        var scrollTimer = null;
 
-        /* Build controls */
-        var controls = document.createElement('div');
-        controls.className = 'carousel-controls';
-        controls.innerHTML =
-          '<button class="carousel-btn" type="button" aria-label="Previous photo">&#8249;</button>' +
-          '<div class="carousel-status" aria-live="polite"><span class="carousel-current">1</span> / ' + slides.length + '</div>' +
-          '<button class="carousel-btn" type="button" aria-label="Next photo">&#8250;</button>';
+        /* Build counter */
+        var counter = document.createElement('div');
+        counter.className = 'carousel-counter';
+        counter.setAttribute('aria-live', 'polite');
+        counter.textContent = '1 of ' + slides.length;
 
         if (hint) {
-          wrap.insertBefore(controls, hint);
+          wrap.insertBefore(counter, hint);
         } else {
-          wrap.appendChild(controls);
+          wrap.appendChild(counter);
         }
 
-        var prevBtn = controls.querySelectorAll('.carousel-btn')[0];
-        var nextBtn = controls.querySelectorAll('.carousel-btn')[1];
-        var currentLabel = controls.querySelector('.carousel-current');
-
-        /* Show only the current slide */
-        function showSlide(index) {
-          index = Math.max(0, Math.min(index, slides.length - 1));
-          slides[current].classList.remove('is-active');
-          current = index;
-          slides[current].classList.add('is-active');
-          currentLabel.textContent = String(current + 1);
-          prevBtn.disabled = current === 0;
-          nextBtn.disabled = current === slides.length - 1;
-        }
-
-        /* Button clicks */
-        prevBtn.addEventListener('click', function (e) {
-          e.preventDefault();
-          showSlide(current - 1);
-        });
-        nextBtn.addEventListener('click', function (e) {
-          e.preventDefault();
-          showSlide(current + 1);
-        });
-
-        /* Swipe support */
-        rail.addEventListener('touchstart', function (e) {
-          touchStartX = e.changedTouches[0].clientX;
-          touchDeltaX = 0;
+        /* Detect which slide is visible after scroll settles */
+        rail.addEventListener('scroll', function () {
+          clearTimeout(scrollTimer);
+          scrollTimer = setTimeout(function () {
+            var cardWidth = slides[0].offsetWidth;
+            if (cardWidth === 0) return;
+            var idx = Math.round(rail.scrollLeft / cardWidth);
+            idx = Math.max(0, Math.min(idx, slides.length - 1));
+            counter.textContent = (idx + 1) + ' of ' + slides.length;
+          }, 60);
         }, { passive: true });
 
-        rail.addEventListener('touchmove', function (e) {
-          touchDeltaX = e.changedTouches[0].clientX - touchStartX;
-          if (Math.abs(touchDeltaX) > 10) {
-            rail.dataset.ignoreClick = 'true';
-          }
+        /* Block lightbox open during swipe */
+        rail.addEventListener('touchmove', function () {
+          rail.dataset.ignoreClick = 'true';
         }, { passive: true });
 
         rail.addEventListener('touchend', function () {
-          if (Math.abs(touchDeltaX) > 50) {
-            if (touchDeltaX < 0) showSlide(current + 1);
-            if (touchDeltaX > 0) showSlide(current - 1);
-          }
           setTimeout(function () {
             rail.dataset.ignoreClick = 'false';
           }, 300);
         }, { passive: true });
 
-        /* Initialize: show first slide */
-        slides[0].classList.add('is-active');
-        prevBtn.disabled = true;
-        nextBtn.disabled = slides.length <= 1;
+        /* Start at first slide */
+        rail.scrollLeft = 0;
       });
     })();
 
