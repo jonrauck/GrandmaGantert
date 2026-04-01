@@ -238,6 +238,7 @@
       border: 1px solid var(--border);
       border-radius: var(--radius);
       box-shadow: var(--shadow-soft);
+      min-width: 0;
     }
     .intro-card, .closing-card, .stories-card { padding: 1.25rem; }
     .section-head { max-width: 760px; margin-bottom: 1.3rem; }
@@ -259,7 +260,7 @@
       margin: 0.9rem auto 0;
       width: 100%;
       max-width: 680px;
-      padding-inline: 0.08rem;
+      min-width: 0;
     }
     .scroller-hint {
       font-size: 0.9rem;
@@ -270,6 +271,7 @@
     .media-rail {
       position: relative;
       width: 100%;
+      min-width: 0;
       touch-action: pan-y;
     }
     .media-card {
@@ -282,7 +284,7 @@
       box-shadow: 0 4px 16px rgba(74, 64, 53, 0.08);
       border: 1px solid rgba(116, 139, 131, 0.08);
       flex-direction: column;
-      align-items: stretch;
+      align-items: center;
     }
     .media-card.is-active {
       display: flex;
@@ -295,14 +297,17 @@
     }
     .media-card img {
       display: block;
-      width: 100%;
+      width: auto;
+      max-width: 100%;
       height: auto;
-      max-height: min(62vh, 520px);
+      max-height: min(68svh, 560px);
+      margin: 0 auto;
       object-fit: contain;
       background: #efe7df;
     }
     .caption {
       padding: 0.72rem 0.8rem 0.88rem;
+      width: 100%;
       font-size: 0.92rem;
       color: var(--text-soft);
       line-height: 1.45;
@@ -362,6 +367,7 @@
       overscroll-behavior-x: contain;
       margin-top: 0.8rem;
       padding: 0.08rem 0.08rem 0.32rem;
+      min-width: 0;
       scrollbar-width: thin;
       scroll-snap-type: x proximity;
     }
@@ -475,6 +481,10 @@
       scroll-snap-type: x mandatory;
       padding-bottom: 0.55rem;
       overscroll-behavior-x: contain;
+    }
+    .story-jump,
+    .story-rail {
+      min-width: 0;
     }
     .story-panel {
       flex: 0 0 min(90vw, 720px);
@@ -1078,13 +1088,16 @@
         shell.classList.toggle('has-right-cue', hasOverflow && !atEnd);
       }
 
-      function scrollThumbIntoView(button) {
-        if (!button) return;
+      function scrollThumbIntoView(container, button) {
+        if (!container || !button) return;
 
-        button.scrollIntoView({
-          behavior: prefersReducedMotion ? 'auto' : 'smooth',
-          block: 'nearest',
-          inline: 'center'
+        const targetLeft = button.offsetLeft - (container.clientWidth - button.offsetWidth) / 2;
+        const maxLeft = Math.max(0, container.scrollWidth - container.clientWidth);
+        const nextLeft = Math.max(0, Math.min(targetLeft, maxLeft));
+
+        container.scrollTo({
+          left: nextLeft,
+          behavior: prefersReducedMotion ? 'auto' : 'smooth'
         });
       }
 
@@ -1202,7 +1215,7 @@
           status.textContent = 'Photo ' + (current + 1) + ' of ' + slides.length;
           prevBtn.disabled = current === 0;
           nextBtn.disabled = current === slides.length - 1;
-          scrollThumbIntoView(thumbButtons[current]);
+          scrollThumbIntoView(thumbnails, thumbButtons[current]);
         }
 
         function showSlide(index, options) {
