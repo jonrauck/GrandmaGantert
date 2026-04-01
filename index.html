@@ -230,7 +230,6 @@
       position: relative;
       margin: 0.9rem auto 0;
       width: min(100%, 860px);
-      overflow: hidden;
     }
     .scroller-hint {
       font-size: 0.88rem;
@@ -259,30 +258,22 @@
       font-weight: 600;
     }
     .media-rail {
-      display: flex;
-      overflow-x: auto;
-      scroll-snap-type: x mandatory;
-      -webkit-overflow-scrolling: touch;
-      scrollbar-width: none;
-      -ms-overflow-style: none;
-      gap: 0;
-      padding: 0.2rem 0 0.3rem;
-    }
-    .media-rail::-webkit-scrollbar { display: none; }
-    .media-card {
-      flex: 0 0 100%;
+      position: relative;
       width: 100%;
-      min-width: 100%;
-      scroll-snap-align: start;
-      scroll-snap-stop: always;
+    }
+    .media-card {
+      display: none;
+      width: 100%;
       border-radius: 18px;
       overflow: hidden;
       background: #fff;
       box-shadow: 0 4px 16px rgba(74, 64, 53, 0.08);
       border: 1px solid rgba(116, 139, 131, 0.08);
-      display: flex;
       flex-direction: column;
       align-items: stretch;
+    }
+    .media-card.is-active {
+      display: flex;
     }
     .media-card img {
       display: block;
@@ -833,11 +824,13 @@
         var slides = Array.from(rail.querySelectorAll('.media-card'));
         if (!slides.length) return;
 
+        var current = 0;
+        var touchStartX = 0;
+        var touchDeltaX = 0;
         var wrap = rail.parentElement;
         var hint = wrap.querySelector('.scroller-hint');
-        var scrollTimer = null;
 
-        /* Build counter */
+        /* Build counter (no arrows) */
         var counter = document.createElement('div');
         counter.className = 'carousel-counter';
         counter.setAttribute('aria-live', 'polite');
@@ -849,31 +842,40 @@
           wrap.appendChild(counter);
         }
 
-        /* Detect which slide is visible after scroll settles */
-        rail.addEventListener('scroll', function () {
-          clearTimeout(scrollTimer);
-          scrollTimer = setTimeout(function () {
-            var cardWidth = slides[0].offsetWidth;
-            if (cardWidth === 0) return;
-            var idx = Math.round(rail.scrollLeft / cardWidth);
-            idx = Math.max(0, Math.min(idx, slides.length - 1));
-            counter.textContent = (idx + 1) + ' of ' + slides.length;
-          }, 60);
+        /* Show only the current slide */
+        function showSlide(index) {
+          index = Math.max(0, Math.min(index, slides.length - 1));
+          slides[current].classList.remove('is-active');
+          current = index;
+          slides[current].classList.add('is-active');
+          counter.textContent = (current + 1) + ' of ' + slides.length;
+        }
+
+        /* Swipe support */
+        rail.addEventListener('touchstart', function (e) {
+          touchStartX = e.changedTouches[0].clientX;
+          touchDeltaX = 0;
         }, { passive: true });
 
-        /* Block lightbox open during swipe */
-        rail.addEventListener('touchmove', function () {
-          rail.dataset.ignoreClick = 'true';
+        rail.addEventListener('touchmove', function (e) {
+          touchDeltaX = e.changedTouches[0].clientX - touchStartX;
+          if (Math.abs(touchDeltaX) > 10) {
+            rail.dataset.ignoreClick = 'true';
+          }
         }, { passive: true });
 
         rail.addEventListener('touchend', function () {
+          if (Math.abs(touchDeltaX) > 50) {
+            if (touchDeltaX < 0) showSlide(current + 1);
+            if (touchDeltaX > 0) showSlide(current - 1);
+          }
           setTimeout(function () {
             rail.dataset.ignoreClick = 'false';
           }, 300);
         }, { passive: true });
 
-        /* Start at first slide */
-        rail.scrollLeft = 0;
+        /* Initialize: show first slide */
+        slides[0].classList.add('is-active');
       });
     })();
 
