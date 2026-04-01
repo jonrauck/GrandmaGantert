@@ -1,0 +1,977 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="A memorial page celebrating the life of Naomi Gantert through photographs, stories, and restored family memories." />
+  <title>In Loving Memory of Naomi Gantert</title>
+  <style>
+    :root {
+      --bg: #f7f3ed;
+      --bg-soft: #fbf8f4;
+      --surface: rgba(255, 255, 255, 0.9);
+      --surface-strong: rgba(255, 255, 255, 0.98);
+      --text: #4f4a45;
+      --text-soft: #6f6963;
+      --heading: #3f3a36;
+      --accent: #8da39a;
+      --accent-deep: #748b83;
+      --accent-warm: #b59f8d;
+      --border: rgba(116, 139, 131, 0.18);
+      --shadow: 0 12px 35px rgba(74, 64, 53, 0.08);
+      --shadow-soft: 0 6px 18px rgba(74, 64, 53, 0.06);
+      --radius: 22px;
+      --radius-sm: 16px;
+      --max: 1160px;
+      --sticky-top: 70px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(181, 159, 141, 0.1), transparent 32%),
+        radial-gradient(circle at top right, rgba(141, 163, 154, 0.12), transparent 28%),
+        var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+    img { max-width: 100%; display: block; }
+    a { color: inherit; text-decoration: none; }
+    button { font: inherit; border: 0; cursor: pointer; background: none; }
+    .container { width: min(calc(100% - 1.2rem), var(--max)); margin: 0 auto; }
+    .section { padding: 2.75rem 0; scroll-margin-top: 88px; }
+    .section-tight { padding-top: 1.6rem; padding-bottom: 1.6rem; }
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      font-size: 0.78rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent-deep);
+      font-weight: 700;
+      margin-bottom: 0.8rem;
+    }
+    .eyebrow::before {
+      content: "";
+      width: 1.1rem;
+      height: 1px;
+      background: currentColor;
+      opacity: 0.6;
+    }
+    h1, h2, h3 {
+      font-family: Georgia, "Times New Roman", serif;
+      color: var(--heading);
+      line-height: 1.15;
+      margin: 0 0 0.8rem;
+      letter-spacing: -0.01em;
+    }
+    h1 { font-size: clamp(2rem, 7vw, 4rem); }
+    h2 { font-size: clamp(1.7rem, 4.8vw, 2.5rem); }
+    h3 { font-size: clamp(1.2rem, 3.7vw, 1.55rem); }
+    p { margin: 0 0 1rem; color: var(--text); }
+    .muted { color: var(--text-soft); }
+    .skip-link {
+      position: absolute;
+      left: -9999px;
+      top: auto;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+    }
+    .skip-link:focus {
+      left: 1rem;
+      top: 1rem;
+      width: auto;
+      height: auto;
+      padding: 0.7rem 1rem;
+      background: #fff;
+      border-radius: 999px;
+      z-index: 100;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .topbar-wrap {
+      position: sticky;
+      top: 0;
+      z-index: 40;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      background: rgba(247, 243, 237, 0.82);
+      border-bottom: 1px solid rgba(116, 139, 131, 0.16);
+    }
+    .topbar {
+      display: flex;
+      gap: 0.55rem;
+      overflow-x: auto;
+      padding: 0.75rem 0;
+      scrollbar-width: none;
+    }
+    .topbar::-webkit-scrollbar { display: none; }
+    .topbar a {
+      white-space: nowrap;
+      padding: 0.62rem 0.92rem;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.8);
+      border: 1px solid rgba(116, 139, 131, 0.16);
+      box-shadow: 0 2px 10px rgba(74,64,53,0.04);
+      font-size: 0.94rem;
+      color: var(--text);
+      min-height: 42px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .hero-shell {
+      padding: 1rem 0 0.7rem;
+    }
+    .hero-card {
+      background: var(--surface-strong);
+      border: 1px solid var(--border);
+      border-radius: 28px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+    .hero-layout {
+      display: grid;
+      gap: 1rem;
+      padding: 1rem;
+    }
+    .hero-portrait {
+      width: 100%;
+      max-width: 360px;
+      margin: 0 auto;
+      border-radius: 24px;
+      overflow: hidden;
+      box-shadow: var(--shadow-soft);
+      background: #eee7de;
+    }
+    .hero-portrait img {
+      width: 100%;
+      aspect-ratio: 4 / 5;
+      object-fit: cover;
+      object-position: center top;
+    }
+    .hero-copy {
+      text-align: center;
+      padding: 0.2rem 0.1rem 0.4rem;
+    }
+    .hero-dates {
+      font-size: 1rem;
+      color: var(--text-soft);
+      margin-bottom: 0.7rem;
+    }
+    .hero-line {
+      font-size: 1.03rem;
+      color: var(--text);
+      max-width: 34ch;
+      margin: 0 auto 1rem;
+    }
+    .hero-actions,
+    .quick-links {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.65rem;
+    }
+    .btn {
+      min-height: 46px;
+      padding: 0.8rem 1.05rem;
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.45rem;
+      font-weight: 600;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .btn-primary {
+      background: var(--accent);
+      color: #fff;
+      box-shadow: 0 8px 24px rgba(116, 139, 131, 0.22);
+    }
+    .btn-secondary, .quick-links a {
+      background: rgba(255,255,255,0.9);
+      color: var(--heading);
+      border: 1px solid rgba(116, 139, 131, 0.18);
+    }
+    .intro-card,
+    .closing-card,
+    .photo-section-card,
+    .stories-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-soft);
+    }
+    .intro-card, .closing-card, .stories-card { padding: 1.25rem; }
+    .section-head { max-width: 760px; margin-bottom: 1.3rem; }
+    .section-head p:last-child { margin-bottom: 0; }
+
+    .photo-stack {
+      display: grid;
+      gap: 1rem;
+    }
+    .photo-section-card { padding: 1rem; }
+    .photo-section-card.restored {
+      background:
+        linear-gradient(180deg, rgba(141, 163, 154, 0.14), rgba(255,255,255,0.86)),
+        var(--surface-strong);
+      border-color: rgba(116, 139, 131, 0.24);
+    }
+    .rail-wrap {
+      position: relative;
+      margin: 0.9rem auto 0;
+      width: min(100%, 560px);
+    }
+    .scroller-hint {
+      font-size: 0.9rem;
+      color: var(--text-soft);
+      margin-top: 0.55rem;
+      text-align: center;
+    }
+    .media-rail {
+      position: relative;
+      width: 100%;
+    }
+    .media-card {
+      display: none;
+      width: 100%;
+      border-radius: 18px;
+      overflow: hidden;
+      background: #fff;
+      box-shadow: 0 4px 16px rgba(74, 64, 53, 0.08);
+      border: 1px solid rgba(116, 139, 131, 0.08);
+      flex-direction: column;
+      align-items: stretch;
+    }
+    .media-card.is-active {
+      display: flex;
+    }
+    .media-card img {
+      display: block;
+      width: 100%;
+      height: auto;
+      max-height: min(62vh, 520px);
+      object-fit: contain;
+      background: #efe7df;
+    }
+    .caption {
+      padding: 0.72rem 0.8rem 0.88rem;
+      font-size: 0.92rem;
+      color: var(--text-soft);
+      line-height: 1.45;
+      background: linear-gradient(to bottom, rgba(255,255,255,0.94), #fff);
+    }
+    .carousel-controls {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.8rem;
+      margin-top: 0.85rem;
+    }
+    .carousel-btn {
+      width: 44px;
+      height: 44px;
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255,255,255,0.94);
+      border: 1px solid rgba(116, 139, 131, 0.18);
+      color: var(--heading);
+      box-shadow: 0 4px 12px rgba(74, 64, 53, 0.08);
+      font-size: 1.25rem;
+      line-height: 1;
+      -webkit-tap-highlight-color: transparent;
+      transition: transform 0.1s ease, box-shadow 0.1s ease;
+    }
+    .carousel-btn:active:not(:disabled) {
+      transform: scale(0.92);
+      box-shadow: 0 2px 6px rgba(74, 64, 53, 0.06);
+    }
+    .carousel-btn:disabled {
+      opacity: 0.45;
+      cursor: default;
+      box-shadow: none;
+    }
+    .carousel-status {
+      min-width: 5rem;
+      text-align: center;
+      font-size: 0.94rem;
+      color: var(--text-soft);
+      font-weight: 600;
+    }
+    .story-rail,
+    .story-jump {
+      display: flex;
+      gap: 0.85rem;
+      overflow-x: auto;
+      scrollbar-width: thin;
+      scroll-snap-type: x proximity;
+      padding-bottom: 0.4rem;
+    }
+
+    .story-jump {
+      margin-bottom: 1rem;
+      padding-bottom: 0.15rem;
+    }
+    .story-jump a {
+      white-space: nowrap;
+      padding: 0.58rem 0.88rem;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.82);
+      border: 1px solid rgba(116, 139, 131, 0.15);
+      font-size: 0.92rem;
+      min-height: 40px;
+      display: inline-flex;
+      align-items: center;
+    }
+    .story-rail {
+      scroll-snap-type: x mandatory;
+      padding-bottom: 0.55rem;
+    }
+    .story-panel {
+      flex: 0 0 min(90vw, 720px);
+      scroll-snap-align: start;
+      background: rgba(255,255,255,0.94);
+      border: 1px solid rgba(116, 139, 131, 0.14);
+      border-radius: 20px;
+      box-shadow: var(--shadow-soft);
+      padding: 1rem;
+    }
+    .story-panel p:last-child { margin-bottom: 0; }
+    .ornament {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.8rem;
+      color: var(--accent-warm);
+      opacity: 0.85;
+      margin: 1rem 0;
+    }
+    .ornament::before,
+    .ornament::after {
+      content: "";
+      width: 3.2rem;
+      height: 1px;
+      background: currentColor;
+      opacity: 0.45;
+    }
+    .ornament span { font-size: 1rem; line-height: 1; }
+
+    .footer-note {
+      text-align: center;
+      font-size: 0.92rem;
+      color: var(--text-soft);
+      padding: 0 0 2.2rem;
+    }
+
+    .lightbox {
+      position: fixed;
+      inset: 0;
+      z-index: 60;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+      background: rgba(26, 22, 19, 0.82);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+    }
+    .lightbox.open { display: flex; }
+    .lightbox-dialog {
+      position: relative;
+      width: min(100%, 900px);
+      max-height: 92svh;
+      border-radius: 22px;
+      overflow: hidden;
+      background: rgba(255,255,255,0.98);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.28);
+    }
+    .lightbox-close {
+      position: absolute;
+      top: 0.7rem;
+      right: 0.7rem;
+      z-index: 2;
+      width: 42px;
+      height: 42px;
+      border-radius: 999px;
+      background: rgba(32, 29, 26, 0.72);
+      color: #fff;
+      display: grid;
+      place-items: center;
+      font-size: 1.2rem;
+      line-height: 1;
+    }
+    .lightbox-figure { margin: 0; display: grid; background: #f4eee7; }
+    .lightbox-figure img {
+      width: 100%;
+      max-height: 76svh;
+      object-fit: contain;
+      background: #f1e9e0;
+    }
+    .lightbox-caption {
+      padding: 1rem 1rem 1.15rem;
+      color: var(--text);
+      font-size: 0.98rem;
+      background: #fff;
+    }
+
+    @media (min-width: 760px) {
+      .container { width: min(calc(100% - 2rem), var(--max)); }
+      .hero-layout {
+        grid-template-columns: minmax(260px, 340px) 1fr;
+        align-items: center;
+        gap: 1.4rem;
+        padding: 1.25rem;
+      }
+      .hero-copy { text-align: left; }
+      .hero-line { margin-left: 0; }
+      .hero-actions, .quick-links { justify-content: flex-start; }
+      .story-panel { flex-basis: min(76vw, 760px); padding: 1.2rem; }
+      .section { padding: 3.4rem 0; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+    }
+  </style>
+</head>
+<body>
+  <a href="#main" class="skip-link">Skip to content</a>
+
+  <div class="topbar-wrap">
+    <nav class="container topbar" aria-label="Quick memorial navigation">
+      <a href="#top">Top</a>
+      <a href="#photos">Photos</a>
+      <a href="#stories">Stories</a>
+      <a href="#closing">Closing</a>
+    </nav>
+  </div>
+
+  <main id="main">
+    <section class="hero-shell section-tight" id="top">
+      <div class="container">
+        <div class="hero-card">
+          <div class="hero-layout">
+            <!-- Replace hero image here -->
+            <div class="hero-portrait">
+              <img src="Screenshot_20250222_140129_Photos.jpg" alt="Naomi Gantert in a portrait photo" fetchpriority="high" />
+            </div>
+
+            <div class="hero-copy">
+              <div class="eyebrow">Remembering Naomi</div>
+              <!-- Replace name here -->
+              <h1>In Loving Memory of Naomi Gantert</h1>
+              <!-- Replace dates here -->
+              <p class="hero-dates">January 17, 1929 – March 27, 2026</p>
+              <!-- Replace memorial line here -->
+              <p class="hero-line">A life full of stories, humor, resilience, and love.</p>
+
+              <div class="quick-links" aria-label="Quick links">
+                <a class="btn btn-secondary" href="#photos">Jump to Photos</a>
+                <a class="btn btn-secondary" href="#stories">Jump to Stories</a>
+              </div>
+
+              <div class="hero-actions" style="margin-top:0.75rem;">
+                <a class="btn btn-primary" href="#photos">View Memories</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="section" id="photos">
+      <div class="container">
+        <div class="section-head">
+          <div class="eyebrow">Photos</div>
+          <h2>Browse the memories one photo at a time</h2>
+          <p class="muted">Use the arrows to move left or right through each photo collection. You can also swipe on phones or tap any photo to open it larger.</p>
+        </div>
+
+        <div class="photo-stack">
+          <article class="photo-section-card">
+            <div class="eyebrow">Photos with Naomi</div>
+            <h3>Photos with Naomi</h3>
+            <p class="muted">Family photos, recent moments, and earlier photographs all in one place.</p>
+            <div class="rail-wrap">
+              <div class="media-rail" aria-label="Photos with Naomi">
+                <!-- Add or remove photos in this section by duplicating a media-card -->
+                <a class="media-card" href="Screenshot_20250222_140129_Photos.jpg" data-lightbox="Naomi portrait photo" data-caption="Naomi in a portrait photo.">
+                  <img src="Screenshot_20250222_140129_Photos.jpg" alt="Naomi in a portrait photo" loading="lazy" />
+                  <div class="caption">Naomi portrait photo.</div>
+                </a>
+                <a class="media-card" href="Screenshot_20250222_140651_Photos.jpg" data-lightbox="Naomi photo" data-caption="A photo of Naomi.">
+                  <img src="Screenshot_20250222_140651_Photos.jpg" alt="A photo of Naomi" loading="lazy" />
+                  <div class="caption">A photo of Naomi.</div>
+                </a>
+                <a class="media-card" href="Screenshot_20250222_140317_Photos.jpg" data-lightbox="Naomi memory photo" data-caption="Another memory with Naomi.">
+                  <img src="Screenshot_20250222_140317_Photos.jpg" alt="Another memory with Naomi" loading="lazy" />
+                  <div class="caption">Another memory with Naomi.</div>
+                </a>
+                <a class="media-card" href="20260117_130221.jpg" data-lightbox="Naomi on a special day" data-caption="Naomi on a special day.">
+                  <img src="20260117_130221.jpg" alt="Naomi on a special day" loading="lazy" />
+                  <div class="caption">Naomi on a special day.</div>
+                </a>
+                <a class="media-card" href="20260117_144223.jpg" data-lightbox="Naomi smiling in a recent portrait" data-caption="Naomi smiling in a recent portrait.">
+                  <img src="20260117_144223.jpg" alt="Naomi smiling in a recent portrait" loading="lazy" />
+                  <div class="caption">Recent portrait.</div>
+                </a>
+                <a class="media-card" href="20250305_220914.jpg" data-lightbox="Naomi smiling" data-caption="Naomi smiling in a warm portrait.">
+                  <img src="20250305_220914.jpg" alt="Naomi smiling in a warm portrait" loading="lazy" />
+                  <div class="caption">Warm portrait.</div>
+                </a>
+                <a class="media-card" href="20250302_173909.jpg" data-lightbox="Naomi with family" data-caption="Naomi with family in a candid moment.">
+                  <img src="20250302_173909.jpg" alt="Naomi with family in a candid moment" loading="lazy" />
+                  <div class="caption">Candid family moment.</div>
+                </a>
+                <a class="media-card" href="20250118_122405.jpg" data-lightbox="Naomi with loved ones" data-caption="Naomi with loved ones.">
+                  <img src="20250118_122405.jpg" alt="Naomi with loved ones" loading="lazy" />
+                  <div class="caption">With loved ones.</div>
+                </a>
+                <a class="media-card" href="20250118_123045.jpg" data-lightbox="Naomi portrait" data-caption="A recent portrait of Naomi.">
+                  <img src="20250118_123045.jpg" alt="A recent portrait of Naomi" loading="lazy" />
+                  <div class="caption">Recent portrait of Naomi.</div>
+                </a>
+                <a class="media-card" href="20250302_172434.jpg" data-lightbox="Family gathering memory" data-caption="A family gathering memory.">
+                  <img src="20250302_172434.jpg" alt="A family gathering memory" loading="lazy" />
+                  <div class="caption">Family gathering.</div>
+                </a>
+                <a class="media-card" href="20250302_172502.jpg" data-lightbox="Naomi family photo" data-caption="A family photo with Naomi.">
+                  <img src="20250302_172502.jpg" alt="A family photo with Naomi" loading="lazy" />
+                  <div class="caption">Family photo.</div>
+                </a>
+                <a class="media-card" href="20250302_172526.jpg" data-lightbox="Naomi family memory" data-caption="A family memory with Naomi.">
+                  <img src="20250302_172526.jpg" alt="A family memory with Naomi" loading="lazy" />
+                  <div class="caption">Family memory.</div>
+                </a>
+                <a class="media-card" href="20250302_172613.jpg" data-lightbox="Naomi during a visit" data-caption="Naomi during a visit.">
+                  <img src="20250302_172613.jpg" alt="Naomi during a visit" loading="lazy" />
+                  <div class="caption">During a visit.</div>
+                </a>
+                <a class="media-card" href="20250302_172644.jpg" data-lightbox="Naomi in conversation with family" data-caption="Naomi in conversation with family.">
+                  <img src="20250302_172644.jpg" alt="Naomi in conversation with family" loading="lazy" />
+                  <div class="caption">In conversation with family.</div>
+                </a>
+                <a class="media-card" href="20250305_221809.jpg" data-lightbox="Naomi during a family gathering" data-caption="Naomi during a family gathering.">
+                  <img src="20250305_221809.jpg" alt="Naomi during a family gathering" loading="lazy" />
+                  <div class="caption">Family gathering.</div>
+                </a>
+                <a class="media-card" href="20250305_221834.jpg" data-lightbox="Naomi with family" data-caption="Naomi with family.">
+                  <img src="20250305_221834.jpg" alt="Naomi with family" loading="lazy" />
+                  <div class="caption">With family.</div>
+                </a>
+                <a class="media-card" href="20250305_222148.jpg" data-lightbox="Naomi laughing during a visit" data-caption="Naomi laughing during a visit.">
+                  <img src="20250305_222148.jpg" alt="Naomi laughing during a visit" loading="lazy" />
+                  <div class="caption">Laughter and conversation.</div>
+                </a>
+                <a class="media-card" href="20250305_222212.jpg" data-lightbox="Naomi family photo" data-caption="A family photo of Naomi.">
+                  <img src="20250305_222212.jpg" alt="A family photo of Naomi" loading="lazy" />
+                  <div class="caption">Family photo of Naomi.</div>
+                </a>
+                <a class="media-card" href="20250305_222235.jpg" data-lightbox="Naomi memory" data-caption="A memory with Naomi.">
+                  <img src="20250305_222235.jpg" alt="A memory with Naomi" loading="lazy" />
+                  <div class="caption">A memory with Naomi.</div>
+                </a>
+                <a class="media-card" href="20250305_222249.jpg" data-lightbox="Naomi later years photo" data-caption="Naomi in a later-years photo.">
+                  <img src="20250305_222249.jpg" alt="Naomi in a later-years photo" loading="lazy" />
+                  <div class="caption">Later-years photo.</div>
+                </a>
+                <a class="media-card" href="20250305_222343.jpg" data-lightbox="Naomi during a family visit" data-caption="Naomi during a family visit.">
+                  <img src="20250305_222343.jpg" alt="Naomi during a family visit" loading="lazy" />
+                  <div class="caption">Family visit.</div>
+                </a>
+                <a class="media-card" href="20250305_222534.jpg" data-lightbox="Naomi in later years" data-caption="Naomi in later years.">
+                  <img src="20250305_222534.jpg" alt="Naomi in later years" loading="lazy" />
+                  <div class="caption">Later years.</div>
+                </a>
+                <a class="media-card" href="20250305_222558.jpg" data-lightbox="Naomi photo" data-caption="A photo of Naomi.">
+                  <img src="20250305_222558.jpg" alt="A photo of Naomi" loading="lazy" />
+                  <div class="caption">A photo of Naomi.</div>
+                </a>
+                <a class="media-card" href="20250305_222625.jpg" data-lightbox="Naomi portrait" data-caption="A later-years portrait of Naomi.">
+                  <img src="20250305_222625.jpg" alt="A later-years portrait of Naomi" loading="lazy" />
+                  <div class="caption">Later-years portrait.</div>
+                </a>
+                <a class="media-card" href="20250305_222709.jpg" data-lightbox="Another recent photo of Naomi" data-caption="Another recent photo of Naomi.">
+                  <img src="20250305_222709.jpg" alt="Another recent photo of Naomi" loading="lazy" />
+                  <div class="caption">Another recent photo.</div>
+                </a>
+                <a class="media-card" href="20230527_161549.jpg" data-lightbox="Earlier photo of Naomi" data-caption="An earlier photo of Naomi.">
+                  <img src="20230527_161549.jpg" alt="An earlier photo of Naomi" loading="lazy" />
+                  <div class="caption">Earlier photo.</div>
+                </a>
+                <a class="media-card" href="20240117_133513.jpg" data-lightbox="Family photo from an earlier year" data-caption="A family photo from an earlier year.">
+                  <img src="20240117_133513.jpg" alt="A family photo from an earlier year" loading="lazy" />
+                  <div class="caption">Earlier family photo.</div>
+                </a>
+                <a class="media-card" href="20240120_124359.jpg" data-lightbox="Earlier family moment" data-caption="An earlier family moment with Naomi.">
+                  <img src="20240120_124359.jpg" alt="An earlier family moment with Naomi" loading="lazy" />
+                  <div class="caption">Earlier family moment.</div>
+                </a>
+                <a class="media-card" href="20240120_124513.jpg" data-lightbox="Earlier family photo" data-caption="An earlier family photo.">
+                  <img src="20240120_124513.jpg" alt="An earlier family photo" loading="lazy" />
+                  <div class="caption">Earlier family photo.</div>
+                </a>
+                <a class="media-card" href="20240120_125423.jpg" data-lightbox="Earlier Naomi photo" data-caption="An earlier photo of Naomi.">
+                  <img src="20240120_125423.jpg" alt="An earlier photo of Naomi" loading="lazy" />
+                  <div class="caption">Earlier Naomi photo.</div>
+                </a>
+                <a class="media-card" href="20240120_125443.jpg" data-lightbox="Family photo with Naomi" data-caption="A family photo with Naomi.">
+                  <img src="20240120_125443.jpg" alt="A family photo with Naomi" loading="lazy" />
+                  <div class="caption">Family photo with Naomi.</div>
+                </a>
+                <a class="media-card" href="20240509_182831.jpg" data-lightbox="Naomi family memory" data-caption="A family memory with Naomi.">
+                  <img src="20240509_182831.jpg" alt="A family memory with Naomi" loading="lazy" />
+                  <div class="caption">Family memory.</div>
+                </a>
+                <a class="media-card" href="20241002_184024.jpg" data-lightbox="Naomi later-life family image" data-caption="A later-life family image with Naomi.">
+                  <img src="20241002_184024.jpg" alt="A later-life family image with Naomi" loading="lazy" />
+                  <div class="caption">Later-life family image.</div>
+                </a>
+                <a class="media-card" href="FullSizeR(2).jpg" data-lightbox="Older family photograph" data-caption="An older family photograph.">
+                  <img src="FullSizeR(2).jpg" alt="An older family photograph" loading="lazy" />
+                  <div class="caption">Older family photograph.</div>
+                </a>
+                <a class="media-card" href="image000000(15).jpg" data-lightbox="Older portrait-style family image" data-caption="An older portrait-style family image.">
+                  <img src="image000000(15).jpg" alt="An older portrait-style family image" loading="lazy" />
+                  <div class="caption">Older portrait-style image.</div>
+                </a>
+                <a class="media-card" href="Resized_Resized_20220116_142805.jpeg" data-lightbox="Another earlier memory of Naomi" data-caption="Another earlier memory of Naomi.">
+                  <img src="Resized_Resized_20220116_142805.jpeg" alt="Another earlier memory of Naomi" loading="lazy" />
+                  <div class="caption">Another earlier memory.</div>
+                </a>
+              </div>
+              <p class="scroller-hint">Use the arrows or swipe to move one photo at a time.</p>
+            </div>
+          </article>
+
+          <article class="photo-section-card restored">
+            <div class="eyebrow">Restored Collection</div>
+            <h3>Restored &amp; Enhanced Memories</h3>
+            <p class="muted">These are enhanced and color-restored versions of some older family photographs.</p>
+            <div class="rail-wrap">
+              <div class="media-rail" aria-label="Restored and enhanced memories">
+                <!-- Restored and enhanced photos section starts here -->
+                <a class="media-card" href="Enhanced_Photos/Gemini_Generated_Image_96pe1q96pe1q96pe.png" data-lightbox="Restored family memory" data-caption="An enhanced and restored family memory.">
+                  <img src="Enhanced_Photos/Gemini_Generated_Image_96pe1q96pe1q96pe.png" alt="An enhanced and restored family memory" loading="lazy" />
+                  <div class="caption">Enhanced family memory.</div>
+                </a>
+                <a class="media-card" href="Enhanced_Photos/Gemini_Generated_Image_ag2np3ag2np3ag2n.png" data-lightbox="Color-restored older family photo" data-caption="A color-restored older family photo.">
+                  <img src="Enhanced_Photos/Gemini_Generated_Image_ag2np3ag2np3ag2n.png" alt="A color-restored older family photo" loading="lazy" />
+                  <div class="caption">Color-restored older photo.</div>
+                </a>
+                <a class="media-card" href="Enhanced_Photos/Gemini_Generated_Image_apebrfapebrfapeb.png" data-lightbox="Restored portrait memory" data-caption="A restored portrait memory.">
+                  <img src="Enhanced_Photos/Gemini_Generated_Image_apebrfapebrfapeb.png" alt="A restored portrait memory" loading="lazy" />
+                  <div class="caption">Restored portrait memory.</div>
+                </a>
+                <a class="media-card" href="Enhanced_Photos/Gemini_Generated_Image_ett2sfett2sfett2.png" data-lightbox="Enhanced family portrait" data-caption="An enhanced family portrait.">
+                  <img src="Enhanced_Photos/Gemini_Generated_Image_ett2sfett2sfett2.png" alt="An enhanced family portrait" loading="lazy" />
+                  <div class="caption">Enhanced family portrait.</div>
+                </a>
+                <a class="media-card" href="Enhanced_Photos/Gemini_Generated_Image_jba8h3jba8h3jba8.png" data-lightbox="Restored childhood-era image" data-caption="A restored childhood-era image.">
+                  <img src="Enhanced_Photos/Gemini_Generated_Image_jba8h3jba8h3jba8.png" alt="A restored childhood-era image" loading="lazy" />
+                  <div class="caption">Restored childhood-era image.</div>
+                </a>
+                <a class="media-card" href="Enhanced_Photos/Gemini_Generated_Image_nivfy3nivfy3nivf.png" data-lightbox="Enhanced vintage family photo" data-caption="An enhanced vintage family photo.">
+                  <img src="Enhanced_Photos/Gemini_Generated_Image_nivfy3nivfy3nivf.png" alt="An enhanced vintage family photo" loading="lazy" />
+                  <div class="caption">Enhanced vintage family photo.</div>
+                </a>
+                <a class="media-card" href="Enhanced_Photos/Gemini_Generated_Image_npir10npir10npir.png" data-lightbox="Restored black-and-white family image" data-caption="A restored black-and-white family image.">
+                  <img src="Enhanced_Photos/Gemini_Generated_Image_npir10npir10npir.png" alt="A restored black-and-white family image" loading="lazy" />
+                  <div class="caption">Restored black-and-white family image.</div>
+                </a>
+                <a class="media-card" href="Enhanced_Photos/Gemini_Generated_Image_pr013qpr013qpr01.png" data-lightbox="Restored early memory" data-caption="A restored early memory.">
+                  <img src="Enhanced_Photos/Gemini_Generated_Image_pr013qpr013qpr01.png" alt="A restored early memory" loading="lazy" />
+                  <div class="caption">Restored early memory.</div>
+                </a>
+                <a class="media-card" href="Enhanced_Photos/Gemini_Generated_Image_vohl7zvohl7zvohl.png" data-lightbox="Color-restored portrait memory" data-caption="A color-restored portrait memory.">
+                  <img src="Enhanced_Photos/Gemini_Generated_Image_vohl7zvohl7zvohl.png" alt="A color-restored portrait memory" loading="lazy" />
+                  <div class="caption">Color-restored portrait.</div>
+                </a>
+                <a class="media-card" href="Enhanced_Photos/Gemini_Generated_Image_w6hsnzw6hsnzw6hs.png" data-lightbox="Enhanced older family photograph" data-caption="An enhanced older family photograph.">
+                  <img src="Enhanced_Photos/Gemini_Generated_Image_w6hsnzw6hsnzw6hs.png" alt="An enhanced older family photograph" loading="lazy" />
+                  <div class="caption">Enhanced older family photo.</div>
+                </a>
+                <a class="media-card" href="Enhanced_Photos/Gemini_Generated_Image_3b0mpl3b0mpl3b0m.png" data-lightbox="Restored family memory" data-caption="A restored family memory.">
+                  <img src="Enhanced_Photos/Gemini_Generated_Image_3b0mpl3b0mpl3b0m.png" alt="A restored family memory" loading="lazy" />
+                  <div class="caption">Restored family memory.</div>
+                </a>
+                <a class="media-card" href="Enhanced_Photos/Gemini_Generated_Image_4f5muv4f5muv4f5m.png" data-lightbox="Enhanced restored photo" data-caption="An enhanced restored photo.">
+                  <img src="Enhanced_Photos/Gemini_Generated_Image_4f5muv4f5muv4f5m.png" alt="An enhanced restored photo" loading="lazy" />
+                  <div class="caption">Enhanced restored photo.</div>
+                </a>
+                <a class="media-card" href="Enhanced_Photos/Gemini_Generated_Image_66ukb266ukb266uk.png" data-lightbox="Restored and colorized memory" data-caption="A restored and colorized memory.">
+                  <img src="Enhanced_Photos/Gemini_Generated_Image_66ukb266ukb266uk.png" alt="A restored and colorized memory" loading="lazy" />
+                  <div class="caption">Restored and colorized memory.</div>
+                </a>
+              </div>
+              <p class="scroller-hint">Swipe left or right to browse more restored images.</p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="stories">
+      <div class="container">
+        <div class="stories-card">
+          <div class="section-head" style="margin-bottom:1rem;">
+            <div class="eyebrow">Her Stories</div>
+            <h2>Naomi’s own words</h2>
+            <p class="muted">Use the story links below, or swipe left and right through the story cards on your phone.</p>
+          </div>
+
+          <nav class="story-jump" aria-label="Story navigation">
+            <a href="#story-childhood">My Life as a Child</a>
+            <a href="#story-winter">Winter and School Days</a>
+            <a href="#story-fritz">Grandpa &amp; Grandma Fritz</a>
+            <a href="#story-word">A Word I Never Forgot</a>
+            <a href="#story-wrong">Always Afraid of Getting It Wrong</a>
+            <a href="#story-love">I Love All of My Children and Grandchildren</a>
+          </nav>
+
+          <div class="story-rail" aria-label="Naomi's stories">
+            <!-- Story section starts here -->
+            <article class="story-panel" id="story-childhood">
+              <h3>My Life as a Child</h3>
+              <p>I was born in Bluejacket, Oklahoma, on January 17, 1929.</p>
+              <p>My dad went to college in McPherson, Kansas, to take courses to become a banker. He was employed in a bank in Bluejacket, Oklahoma, before Mignon and I were born. We stayed in Bluejacket for about 13 years before moving back to Kansas. Dad didn’t like working inside, and he wanted an outside job, so we moved to Bartlett, Kansas, where he became a rural mail carrier.</p>
+              <p>We moved to the country just outside of Bartlett, and Dad bought some farmland, where we planted a large garden. Dad planted corn, beans, and wheat.</p>
+              <p>Mom washed clothes on a washboard for five kids. We also had no electricity, just lamps to read by and do homework. Mignon and I were chosen to herd the cows along the road to eat grass, and we would throw rocks at each other, sometimes getting hit in the eye.</p>
+              <p>We were around seven and eight years old when we babysat for a neighbor down the road. Mignon and I had a little straw doll buggy. We would put the baby, Charlott, in the buggy and push her half a mile down the rock road. The buggy’s wheels were bent, but they still worked.</p>
+              <div class="ornament" aria-hidden="true"><span>✦</span></div>
+              <p>When Mignon and I were just little girls, we lived across the street, in town, from a school janitor. Everyone but the Smith family called him Bum Davis.</p>
+              <p>One day Mignon and I were outside making mud pies. We started throwing them at Mr. Davis’s porch while we thought he was at work. He came over to us and said, “Do you like mud pies?” We of course said “no,” which was a mistake. He said, “Take a bite out of the mud pies and I won’t tell your dad what you did.” We were happy to hear “won’t tell your dad,” so we took a small bite.</p>
+              <p>That was the end of making mud pies.</p>
+              <div class="ornament" aria-hidden="true"><span>✦</span></div>
+              <p>Later, we had chores to do. My dad would take four of us up to the field behind our house, about half a mile away, to pull weeds. Mignon usually stayed at the house and did housework, and sometimes ironing.</p>
+              <p>When Dad would go on his mail route, he would take his shotgun and shoot rabbits. At home, Mom would clean them. That’s what we would eat for supper.</p>
+              <p>I remember there was a railroad that ran about 1 1/4 miles behind our house. Hobos would jump off the train and come knocking on our back door for food or work. We always fed them, sometimes inviting them into our house or to sit in the backyard. My dad only picked a few of them to work for him.</p>
+              <p>He once put two of them upstairs with us four girls. Quinton was away, as he had been drafted into the Army. Can you imagine that now — two men upstairs with three or four girls? I remember two of their names were Walter Wood and Gene Stafford. Everyone liked Gene quite a bit.</p>
+              <p>It seemed like the Black men were better workers than the white men. My dad hired four of them to build a pond so the cows would have water to drink. When the ponds and wells went dry, we hooked up large barrels on a trailer and went into town to fill them. We would come home, dip the water out of the barrels, and put it in a big trough for the cows. Several times this was at ten or eleven at night, and then it was off to school the next day.</p>
+              <div class="ornament" aria-hidden="true"><span>✦</span></div>
+              <p>One of the jobs Mary and I had was milking the goats. I usually held Nanny the goat by the horns while Mary milked it. My dad would have Mary squirt the milk in his mouth. Yuck.</p>
+              <div class="ornament" aria-hidden="true"><span>✦</span></div>
+              <p>My mom would get chicken feed in cloth sacks, about 50-pound bags. The print on the bags had flowers on it. Mom would cut them and make dresses for us four girls. They were really pretty, I guess. We thought we were being punished, because we never bought dresses from the store.</p>
+            </article>
+
+            <article class="story-panel" id="story-winter">
+              <h3>Winter and School Days</h3>
+              <p>We lived a mile from town. In the winter it was very cold, and we had to walk to school. Mom made us very long cotton socks. Only us four Smith sisters had to wear them, so we wore garters made from elastic strips sewn together. We would roll them down below our knees as soon as we got out of sight of the house.</p>
+              <p>We never got to stay after school and play with the other kids, because we had work to do at home.</p>
+              <p>There was a very large pond across the road from us. In the wintertime we would all get together, including the town kids, and slide on it with our shoes on. We didn’t have skates. That was lots of fun.</p>
+              <div class="ornament" aria-hidden="true"><span>✦</span></div>
+              <p>We went to high school in Chetopa, Kansas. Quinton, Mary, and I went there first. Mary and I lived with Grandpa and Grandma Fritz in their funeral home. When Mignon got into high school, she and I rode the bus to Altamont High.</p>
+              <p>One cold winter day, we rode the bus home, and one of the boys, Richard Graw, started acting up. The bus driver, Mr. Williams, told Richard that if he did not sit down he would put him off the bus. Richard said, “No you won’t.”</p>
+              <p>Mr. Williams stopped the bus, opened the door, and said, “Get off the bus.” Richard got off about half a mile down the road, and then Mr. Williams got worried. He turned the bus around but couldn’t find him. Because it was so cold, Mr. Williams started to panic. When Mr. Williams got into town, someone else had already picked Richard up and brought him home.</p>
+              <p>I never heard if the bus driver got into trouble or not. I guess I really didn’t care.</p>
+            </article>
+
+            <article class="story-panel" id="story-fritz">
+              <h3>Grandpa &amp; Grandma Fritz</h3>
+              <p>When I lived with Grandpa and Grandma Fritz in their funeral home, Grandpa would send me downstairs where the dead people were kept. I was so scared, and he knew it. He would wait until I was down the stairs, then slip in behind one of the caskets and make a thumping noise. He thought that was so funny.</p>
+              <div class="ornament" aria-hidden="true"><span>✦</span></div>
+              <p>Also, when Grandpa and Grandma got in the car, Grandpa would act like he was going to drive away after Grandma was halfway in. She would yell, “Charlie, stop!” He was so full of it.</p>
+              <div class="ornament" aria-hidden="true"><span>✦</span></div>
+              <p>When Grandpa had a couple of Black men helping him move bodies in the hearse, he would shut the men in the hearse just to scare them. They would laugh and say, “Mister Charlie, you are full of shit.”</p>
+            </article>
+
+            <article class="story-panel" id="story-word">
+              <h3>A Word I Never Forgot</h3>
+              <p>Mom got real sick one day, so I stayed home from school to help her. We had a stove that used propane or butane gas, and Mom told me to go light the stove and warm up some soup. She didn’t know how terrified I was to strike a match.</p>
+              <p>I started crying, and she got so mad at me that she said I was acting like a “simpleton.” I did not ask her what the word meant, but it has stayed with me forever. I would have called myself something even worse. I think Quinton told me it meant someone was simple. I thought to myself, that does not sound too bad.</p>
+            </article>
+
+            <article class="story-panel" id="story-wrong">
+              <h3>Always Afraid of Getting It Wrong</h3>
+              <p>Something no one knew about me: I had no self-esteem. I always had the fear of being called on to do something, because it was always in my mind that I would do it wrong. At school or church, I never volunteered to do anything, with the exception of being a hostess.</p>
+              <p>When I got up enough courage, I said I would be a hostess. I took pies for dessert, and one of the women offered to help me carry them. She made me drop one of them. So, see, I even messed up through her.</p>
+              <div class="ornament" aria-hidden="true"><span>✦</span></div>
+              <p>One time, I think I was about eight years old, I was in Sunday school and we were told to learn a Bible verse to say in class. I did not remember to study it. When the teacher, Miss Bertha, an old maid, called on me, I crawled under the table, which of course she told my dad. I always remembered to study after that.</p>
+              <p>So if I appear to be dumb or forgetful, I just don’t trust myself for anything.</p>
+            </article>
+
+            <article class="story-panel" id="story-love">
+              <h3>I Love All of My Children and Grandchildren</h3>
+              <p>One day I will rewrite all this so you can read it better. But I do know for sure that I love my children and my grandchildren with all my heart.</p>
+              <p>Please stick all together and be there for each other.</p>
+              <p>We all make mistakes.</p>
+            </article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="closing">
+      <div class="container">
+        <div class="closing-card">
+          <div class="eyebrow">With Love</div>
+          <h2>Hold on to the stories</h2>
+          <!-- Replace closing text here -->
+          <p>She loved her children and grandchildren with all her heart. Please keep sharing stories, photos, and memories, and keep being there for one another.</p>
+        </div>
+      </div>
+    </section>
+
+    <footer class="footer-note">With love, in memory of Naomi Gantert.</footer>
+  </main>
+
+  <div class="lightbox" id="lightbox" aria-hidden="true">
+    <div class="lightbox-dialog" role="dialog" aria-modal="true" aria-labelledby="lightbox-caption">
+      <button class="lightbox-close" type="button" aria-label="Close image viewer">✕</button>
+      <figure class="lightbox-figure">
+        <img id="lightbox-image" src="" alt="" />
+        <figcaption class="lightbox-caption" id="lightbox-caption"></figcaption>
+      </figure>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      var carousels = document.querySelectorAll('.media-rail');
+
+      carousels.forEach(function (rail) {
+        var slides = Array.from(rail.querySelectorAll('.media-card'));
+        if (!slides.length) return;
+
+        var current = 0;
+        var touchStartX = 0;
+        var touchDeltaX = 0;
+        var wrap = rail.parentElement;
+        var hint = wrap.querySelector('.scroller-hint');
+
+        /* Build controls */
+        var controls = document.createElement('div');
+        controls.className = 'carousel-controls';
+        controls.innerHTML =
+          '<button class="carousel-btn" type="button" aria-label="Previous photo">&#8249;</button>' +
+          '<div class="carousel-status" aria-live="polite"><span class="carousel-current">1</span> / ' + slides.length + '</div>' +
+          '<button class="carousel-btn" type="button" aria-label="Next photo">&#8250;</button>';
+
+        if (hint) {
+          wrap.insertBefore(controls, hint);
+        } else {
+          wrap.appendChild(controls);
+        }
+
+        var prevBtn = controls.querySelectorAll('.carousel-btn')[0];
+        var nextBtn = controls.querySelectorAll('.carousel-btn')[1];
+        var currentLabel = controls.querySelector('.carousel-current');
+
+        /* Show only the current slide */
+        function showSlide(index) {
+          index = Math.max(0, Math.min(index, slides.length - 1));
+          slides[current].classList.remove('is-active');
+          current = index;
+          slides[current].classList.add('is-active');
+          currentLabel.textContent = String(current + 1);
+          prevBtn.disabled = current === 0;
+          nextBtn.disabled = current === slides.length - 1;
+        }
+
+        /* Button clicks */
+        prevBtn.addEventListener('click', function (e) {
+          e.preventDefault();
+          showSlide(current - 1);
+        });
+        nextBtn.addEventListener('click', function (e) {
+          e.preventDefault();
+          showSlide(current + 1);
+        });
+
+        /* Swipe support */
+        rail.addEventListener('touchstart', function (e) {
+          touchStartX = e.changedTouches[0].clientX;
+          touchDeltaX = 0;
+        }, { passive: true });
+
+        rail.addEventListener('touchmove', function (e) {
+          touchDeltaX = e.changedTouches[0].clientX - touchStartX;
+          if (Math.abs(touchDeltaX) > 10) {
+            rail.dataset.ignoreClick = 'true';
+          }
+        }, { passive: true });
+
+        rail.addEventListener('touchend', function () {
+          if (Math.abs(touchDeltaX) > 50) {
+            if (touchDeltaX < 0) showSlide(current + 1);
+            if (touchDeltaX > 0) showSlide(current - 1);
+          }
+          setTimeout(function () {
+            rail.dataset.ignoreClick = 'false';
+          }, 300);
+        }, { passive: true });
+
+        /* Initialize: show first slide */
+        slides[0].classList.add('is-active');
+        prevBtn.disabled = true;
+        nextBtn.disabled = slides.length <= 1;
+      });
+    })();
+
+    (function () {
+      const lightbox = document.getElementById('lightbox');
+      const lightboxImage = document.getElementById('lightbox-image');
+      const lightboxCaption = document.getElementById('lightbox-caption');
+      const closeButton = lightbox.querySelector('.lightbox-close');
+      const triggers = document.querySelectorAll('[data-lightbox]');
+      let lastFocused = null;
+
+      function openLightbox(src, alt, caption) {
+        lastFocused = document.activeElement;
+        lightboxImage.src = src;
+        lightboxImage.alt = alt || '';
+        lightboxCaption.textContent = caption || '';
+        lightbox.classList.add('open');
+        lightbox.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
+        closeButton.focus();
+      }
+
+      function closeLightbox() {
+        lightbox.classList.remove('open');
+        lightbox.setAttribute('aria-hidden', 'true');
+        lightboxImage.src = '';
+        lightboxImage.alt = '';
+        lightboxCaption.textContent = '';
+        document.body.style.overflow = '';
+        if (lastFocused) lastFocused.focus();
+      }
+
+      triggers.forEach(trigger => {
+        trigger.addEventListener('click', function (event) {
+          const parentRail = trigger.closest('.media-rail');
+          if (parentRail && parentRail.dataset.ignoreClick === 'true') {
+            event.preventDefault();
+            return;
+          }
+
+          event.preventDefault();
+          const img = trigger.querySelector('img');
+          const src = trigger.getAttribute('href');
+          const alt = trigger.getAttribute('data-lightbox') || (img ? img.alt : '');
+          const caption = trigger.getAttribute('data-caption') || '';
+          openLightbox(src, alt, caption);
+        });
+      });
+
+      closeButton.addEventListener('click', closeLightbox);
+      lightbox.addEventListener('click', function (event) {
+        if (event.target === lightbox) closeLightbox();
+      });
+      document.addEventListener('keydown', function (event) {
+        if (event.key === 'Escape' && lightbox.classList.contains('open')) closeLightbox();
+      });
+    })();
+  </script>
+</body>
+</html>
