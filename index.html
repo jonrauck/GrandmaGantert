@@ -246,7 +246,6 @@
     .photo-stack {
       display: grid;
       gap: 1rem;
-      overflow-x: clip;
     }
     .photo-section-card { padding: 1rem; }
     .photo-section-card.restored {
@@ -260,7 +259,7 @@
       margin: 0.9rem auto 0;
       width: 100%;
       max-width: 680px;
-      overflow-x: clip;
+      padding-inline: 0.08rem;
     }
     .scroller-hint {
       font-size: 0.9rem;
@@ -276,6 +275,7 @@
     .media-card {
       display: none;
       width: 100%;
+      max-width: 100%;
       border-radius: 18px;
       overflow: hidden;
       background: #fff;
@@ -407,6 +407,40 @@
       padding-bottom: 0.15rem;
       overscroll-behavior-x: contain;
     }
+    .story-jump-shell {
+      position: relative;
+      margin-bottom: 1rem;
+    }
+    .story-jump-shell::before,
+    .story-jump-shell::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.18s ease;
+    }
+    .story-jump-shell::before {
+      left: 0;
+      width: 1.6rem;
+      background: linear-gradient(to right, rgba(247, 243, 237, 0.94), rgba(247, 243, 237, 0));
+    }
+    .story-jump-shell::after {
+      right: 0;
+      width: 4.4rem;
+      background:
+        linear-gradient(to right, rgba(247, 243, 237, 0), rgba(247, 243, 237, 0.96) 56%),
+        radial-gradient(circle at calc(100% - 1.2rem) 50%, rgba(116, 139, 131, 0.84) 0.95rem, transparent 1rem);
+    }
+    .story-jump-shell.has-left-cue::before,
+    .story-jump-shell.has-right-cue::after {
+      opacity: 1;
+    }
+    .story-jump-shell.has-right-cue .story-jump-cue {
+      opacity: 1;
+      transform: translateY(-50%);
+    }
     .story-jump a {
       white-space: nowrap;
       padding: 0.58rem 0.88rem;
@@ -417,6 +451,25 @@
       min-height: 40px;
       display: inline-flex;
       align-items: center;
+    }
+    .story-jump-cue {
+      position: absolute;
+      top: 50%;
+      right: 0.3rem;
+      width: 2.1rem;
+      height: 2.1rem;
+      border-radius: 999px;
+      display: grid;
+      place-items: center;
+      background: rgba(116, 139, 131, 0.8);
+      color: #fff;
+      font-size: 1.35rem;
+      line-height: 1;
+      box-shadow: 0 8px 22px rgba(74, 64, 53, 0.14);
+      pointer-events: none;
+      opacity: 0;
+      transform: translateY(-50%) translateX(2px);
+      transition: opacity 0.18s ease, transform 0.18s ease;
     }
     .story-rail {
       scroll-snap-type: x mandatory;
@@ -627,10 +680,6 @@
               <div class="quick-links" aria-label="Quick links">
                 <a class="btn btn-secondary" href="#photos">Jump to Photos</a>
                 <a class="btn btn-secondary" href="#stories">Jump to Stories</a>
-              </div>
-
-              <div class="hero-actions" style="margin-top:0.75rem;">
-                <a class="btn btn-primary" href="#photos">View Memories</a>
               </div>
             </div>
           </div>
@@ -872,14 +921,17 @@
             <p class="muted">Use the story links below, or swipe left and right through the story cards on your phone.</p>
           </div>
 
-          <nav class="story-jump" aria-label="Story navigation">
-            <a href="#story-childhood">My Life as a Child</a>
-            <a href="#story-winter">Winter and School Days</a>
-            <a href="#story-fritz">Grandpa &amp; Grandma Fritz</a>
-            <a href="#story-word">A Word I Never Forgot</a>
-            <a href="#story-wrong">Always Afraid of Getting It Wrong</a>
-            <a href="#story-love">I Love All of My Children and Grandchildren</a>
-          </nav>
+          <div class="story-jump-shell">
+            <nav class="story-jump" aria-label="Story navigation">
+              <a href="#story-childhood">My Life as a Child</a>
+              <a href="#story-winter">Winter and School Days</a>
+              <a href="#story-fritz">Grandpa &amp; Grandma Fritz</a>
+              <a href="#story-word">A Word I Never Forgot</a>
+              <a href="#story-wrong">Always Afraid of Getting It Wrong</a>
+              <a href="#story-love">I Love All of My Children and Grandchildren</a>
+            </nav>
+            <div class="story-jump-cue" aria-hidden="true">&#8250;</div>
+          </div>
 
           <div class="story-rail" aria-label="Naomi's stories">
             <!-- Story section starts here -->
@@ -1014,6 +1066,16 @@
       function activeElementIsInside(node) {
         const active = document.activeElement;
         return active instanceof HTMLElement && node.contains(active);
+      }
+
+      function updateScrollCue(shell, rail) {
+        const overflowAmount = rail.scrollWidth - rail.clientWidth;
+        const hasOverflow = overflowAmount > 8;
+        const atStart = rail.scrollLeft <= 4;
+        const atEnd = !hasOverflow || rail.scrollLeft >= overflowAmount - 4;
+
+        shell.classList.toggle('has-left-cue', hasOverflow && !atStart);
+        shell.classList.toggle('has-right-cue', hasOverflow && !atEnd);
       }
 
       function scrollThumbIntoView(button) {
@@ -1232,6 +1294,19 @@
         rail.dataset.ignoreClick = 'false';
         syncSlideState();
         carouselMap.set(rail, { showSlide: showSlide });
+      });
+
+      Array.from(document.querySelectorAll('.story-jump-shell')).forEach(function (shell) {
+        const rail = shell.querySelector('.story-jump');
+        if (!rail) return;
+
+        const update = function () {
+          updateScrollCue(shell, rail);
+        };
+
+        rail.addEventListener('scroll', update, { passive: true });
+        window.addEventListener('resize', update);
+        update();
       });
 
       triggers.forEach(trigger => {
